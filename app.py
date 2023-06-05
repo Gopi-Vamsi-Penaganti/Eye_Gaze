@@ -37,29 +37,30 @@ def main():
     download_model()
     model = load_saved_model()
 
-    cap = cv2.VideoCapture(0)  # Use the default webcam
     # Get the full screen resolution
     #screen_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     #screen_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(2048))  # Set the frame width
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(1080))  # Set the frame height
+    #cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(2048))  # Set the frame width
+    #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(1080))  # Set the frame height
     frame_num = 0
 
     st.title("Face Gaze Detection using webcam")
     run = st.checkbox('Run')
     video_placeholder = st.image([])
-    camera = cv2.VideoCapture(0)
+    camera = st.camera_input()
 
     # Create a placeholder for the video stream
     video_placeholder = st.empty()
 
     while run:
         # Capture frame-by-frame
-        ret, frame = cap.read()
+        frame = st.camera_input()
         frame_num += 1
 
         # Get the face from the frame
-        face = get_face(frame)
+        face = None
+        if frame:
+            face = get_face(frame)
 
         # If a face is detected
         if face is not None:
