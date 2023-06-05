@@ -29,7 +29,7 @@ def load_saved_model(path='saved_models/best_model.h5'):
 def download_model():
     file_id = '18ZDtFwPYxF9-4GbOOZzWIKltBkjVESFT'
     url = f'https://drive.google.com/uc?id={file_id}'
-    output = 'best_model.h5'
+    output = 'saved_models/best_model.h5'
     gdown.download(url, output, quiet=False)
 
 def main():
