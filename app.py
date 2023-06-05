@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 import streamlit as st
 import gdown
-from webrtc_streamer import webrtc_streamer
+from streamlit_webrtc import webrtc_streamer
 
 def get_face(frame):
     # Load the pre-trained face cascade from OpenCV
