@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 import streamlit as st
 import gdown
+from webrtc_streamer import webrtc_streamer
 
 def get_face(frame):
     # Load the pre-trained face cascade from OpenCV
@@ -37,30 +38,20 @@ def main():
     download_model()
     model = load_saved_model()
 
-    # Get the full screen resolution
-    #screen_width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-    #screen_height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-    #cap.set(cv2.CAP_PROP_FRAME_WIDTH, int(2048))  # Set the frame width
-    #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, int(1080))  # Set the frame height
-    frame_num = 0
-
     st.title("Face Gaze Detection using webcam")
     run = st.checkbox('Run')
-    video_placeholder = st.image([])
-    
-
-    # Create a placeholder for the video stream
-    video_placeholder = st.empty()
 
     while run:
-        # Capture frame-by-frame
-        frame = st.camera_input("Video is ON")
-        frame_num += 1
+        webrtc_ctx = webrtc_streamer(key="example", video_transformer_factory=None, async_transform=True)
+
+        if webrtc_ctx.video_transformer:
+            frame = webrtc_ctx.video_transformer.input_frame
+        else:
+            st.warning("Webcam stream disconnected.")
+            break
 
         # Get the face from the frame
-        face = None
-        if frame:
-            face = get_face(frame)
+        face = get_face(frame)
 
         # If a face is detected
         if face is not None:
@@ -74,14 +65,11 @@ def main():
 
         # Display the resulting frame
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        video_placeholder.image(frame_rgb, channels="RGB")
+        st.image(frame_rgb, channels="RGB")
 
         # Exit if 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
-    # Release the webcam
-    cap.release()
 
 if __name__ == "__main__":
     main()
