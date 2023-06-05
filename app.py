@@ -47,14 +47,14 @@ def main():
     st.title("Face Gaze Detection using webcam")
     run = st.checkbox('Run')
     video_placeholder = st.image([])
-    camera = st.camera_input()
+    
 
     # Create a placeholder for the video stream
     video_placeholder = st.empty()
 
     while run:
         # Capture frame-by-frame
-        frame = st.camera_input()
+        frame = st.camera_input("Video is ON")
         frame_num += 1
 
         # Get the face from the frame
